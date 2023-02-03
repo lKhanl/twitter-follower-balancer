@@ -32,4 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 
-*-test.yaml
+src/main/resources/application-test.yaml
