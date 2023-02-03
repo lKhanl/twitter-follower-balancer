@@ -41,7 +41,7 @@ public class BalancerService {
     private String consumerSecret;
     @Value("${twitter.token}")
     private String token;
-    @Value("${twitter.token.secret}")
+    @Value("${twitter.tokenSecret}")
     private String tokenSecret;
     private final Configuration configuration;
     private final TwitterService twitterService;
