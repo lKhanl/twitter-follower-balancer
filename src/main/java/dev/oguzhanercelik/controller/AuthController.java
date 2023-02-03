@@ -52,7 +52,7 @@ public class AuthController {
         mailConfirmation.setToken(Singleton.generateRandomString(20));
         confirmationService.save(mailConfirmation);
 
-        Map<String, Object> content = Map.of("link", "http://localhost:4001/confirm?token=" + mailConfirmation.getToken() + "&mail=" + user.getEmail());
+        Map<String, Object> content = Map.of("link", "https://twitter-balancer.oguzhanercelik.dev/confirm?token=" + mailConfirmation.getToken() + "&mail=" + user.getEmail());
         mailService.sendMail(user.getEmail(), "Confirmation Mail", "ConfirmationMail", content);
 
         return "redirect:/login";
