@@ -1,12 +1,17 @@
 package dev.oguzhanercelik.controller;
 
 import dev.oguzhanercelik.model.Singleton;
+import dev.oguzhanercelik.model.dto.TwitterUserDto;
 import dev.oguzhanercelik.model.entity.MailConfirmation;
+import dev.oguzhanercelik.model.entity.TwitterUser;
 import dev.oguzhanercelik.model.entity.User;
+import dev.oguzhanercelik.model.request.CreateUserRequest;
+import dev.oguzhanercelik.model.request.TwitterProfileRequest;
 import dev.oguzhanercelik.service.ConfirmationService;
 import dev.oguzhanercelik.service.MailService;
 import dev.oguzhanercelik.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.mail.MessagingException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
@@ -22,6 +28,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthController {
 
+    @Value("${twitter.bearer}")
+    private String bearer;
+    @Value("${twitter.api.url}")
+    private String base;
     private final UserService userService;
     private final MailService mailService;
     private final ConfirmationService confirmationService;
@@ -39,12 +49,21 @@ public class AuthController {
     }
 
     @PostMapping("/process_register")
-    public String processRegister(User user) throws MessagingException, UnsupportedEncodingException {
+    public String processRegister(CreateUserRequest body) throws MessagingException, IOException {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-        user.setEnabled(false);
 
+        Map<String, String> map = Map.of("Authorization", "Bearer " + bearer);
+        String responseBody = Singleton.getHttpResponseBody(null, null, base + "users/by/username/" + body.getUsername(), "GET", map);
+        TwitterProfileRequest twitterUserDto = (TwitterProfileRequest) Singleton.getPOJOFromJSON(responseBody, TwitterProfileRequest.class);
+        if (twitterUserDto == null) {
+            return "redirect:/register";
+        }
+
+        User user = new User();
+        user.setEmail(body.getEmail());
+        user.setPassword(passwordEncoder.encode(body.getPassword()));
+        user.setEnabled(false);
+        user.setTwitterId(twitterUserDto.getData().getId());
         userService.save(user);
 
         MailConfirmation mailConfirmation = new MailConfirmation();
