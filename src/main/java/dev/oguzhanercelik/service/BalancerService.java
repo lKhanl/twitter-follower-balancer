@@ -35,14 +35,6 @@ public class BalancerService {
     private String base;
     @Value("${twitter.bearer}")
     private String bearer;
-    @Value("${twitter.consumer.key}")
-    private String consumerKey;
-    @Value("${twitter.consumer.secret}")
-    private String consumerSecret;
-    @Value("${twitter.token}")
-    private String token;
-    @Value("${twitter.tokenSecret}")
-    private String tokenSecret;
     private final Configuration configuration;
     private final TwitterService twitterService;
     private final MailService mailService;
