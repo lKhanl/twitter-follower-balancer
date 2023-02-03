@@ -60,11 +60,11 @@
             </div>
         </form>
 
-        <form class="mb-2" action="get" th:action="@{/balance}">
+        <form class="mb-2" th:action="@{/balance}">
             <input class="btn btn-primary" type="submit" value="Balance"/>
         </form>
 
-        <form action="post">
+        <form method="POST" th:action="@{/api/users/delete}">
             <input class="btn btn-danger" type="submit" value="Delete Account"/>
         </form>
 

@@ -2,6 +2,7 @@ package dev.oguzhanercelik.controller;
 
 import dev.oguzhanercelik.model.TwitterProfile;
 import dev.oguzhanercelik.model.entity.User;
+import dev.oguzhanercelik.service.BalancerService;
 import dev.oguzhanercelik.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +20,7 @@ public class UserController {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final BalancerService balancerService;
 
     @GetMapping("/api/users/profile")
     public String profile(Principal principal, HttpServletRequest request) throws Exception {
@@ -45,6 +47,14 @@ public class UserController {
         userService.save(user);
 
         return "redirect:/profile";
+    }
+
+    @PostMapping("/api/users/delete")
+    public String deleteUser(Principal principal) throws Exception {
+        User user = userService.findByEmail(principal.getName());
+        balancerService.reset(user);
+        userService.delete(user.getId());
+        return "redirect:/logout";
     }
 
 }

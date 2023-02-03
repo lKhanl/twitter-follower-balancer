@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,5 +30,9 @@ public class UserService implements UserDetailsService {
 
     public User save(User user) {
         return userRepository.save(user);
+    }
+
+    public void delete(Long id) {
+        userRepository.deleteByEmail(id);
     }
 }
