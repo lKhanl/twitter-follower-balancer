@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Profile</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <span class="navbar-brand">Twitter Follower Balancer</span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/profile">Profile <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/twitter">Twitter</a>
+            </li>
+        </ul>
+        <form th:action="@{/logout}" method="post">
+            <input class="btn btn-danger" type="submit" value="Sign Out"/>
+        </form>
+    </div>
+</nav>
+
+<div class="container text-center">
+
+    <div class="mx-2">
+        <h1>Profile</h1>
+    </div>
+
+    <div class="d-flex justify-content-center align-items-center flex-column">
+        <form th:action="@{/api/users/update}" th:value="user" method="POST" class="col-lg-4 col-11">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input th:value="${user.email}" name="email" type="email" class="form-control" id="exampleInputEmail1"
+                       aria-describedby="emailHelp"
+                       placeholder="Enter email">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input name="password" type="password" class="form-control" id="exampleInputPassword1"
+                       placeholder="Password">
+            </div>
+            <div class="form-group">
+                <label for="apiKey">Twitter Id</label>
+                <input th:value="${user.twitterId}" name="apiKey" type="text" class="form-control" id="apiKey"
+                       placeholder="Api Key">
+            </div>
+            <div>
+                <button type="submit" class="btn btn-success mb-2">Update</button>
+            </div>
+        </form>
+
+        <form class="mb-2" action="get" th:action="@{/balance}">
+            <input class="btn btn-primary" type="submit" value="Balance"/>
+        </form>
+
+        <form action="post">
+            <input class="btn btn-danger" type="submit" value="Delete Account"/>
+        </form>
+
+    </div>
+
+</div>
+</body>
+</html>
