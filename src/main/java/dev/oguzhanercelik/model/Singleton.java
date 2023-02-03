@@ -44,6 +44,15 @@ import java.util.stream.Stream;
 
 public class Singleton {
 
+    public static String generateRandomString(int length) {
+        String numerals = "0123456789abcdefghijklmnopqrstuvwxyz";
+        String response = "";
+        for (int i = 0; i < length; i++) {
+            response += numerals.charAt((int) (Math.random() * numerals.length()));
+        }
+        return response + (Instant.now().toEpochMilli() % 1000000000);
+    }
+
     public static Object getPOJOFromJSON(String json, Class<?> clazz) {
 
         ObjectMapper mapper = new ObjectMapper();

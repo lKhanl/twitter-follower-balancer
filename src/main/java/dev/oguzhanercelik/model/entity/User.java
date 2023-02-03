@@ -27,6 +27,8 @@ public class User implements UserDetails {
 	private String twitterId;
     @Column(name = "last_process_date")
     private LocalDate lastProcessDate;
+    @Column(nullable = false)
+    private boolean enabled;
     @OneToMany(mappedBy = "user")
     private Collection<TwitterUser> twitterUsers;
 
@@ -57,7 +59,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 
 }
